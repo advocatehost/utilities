@@ -15,8 +15,8 @@ echo "Enter the DB name for Django:"
 read -e -i "graphite" DBNAME
 echo "This server's public IP address (Will be added to the Apache config):"
 read IPADDRESS
-echo "Enter a 32 character string of letters and numbers to be used as a secret key for Django:"
-read SECRET_KEY
+echo "I have generated a secret key (32 character alphanumeric) for you below. Press Enter to continue, or change it if you prefer:"
+read -e -i $(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) SECRET_KEY
 
 echo "Installing EPEL Repo and wget"
 sleep 3
