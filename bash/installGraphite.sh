@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "This script should only be run on centos 7 with python 2.7 Continue? y/n"
+echo "This script should only be run on a fresh installation of Centos 7 with python 2.7 . Would you like to continue? y/n"
 read CONTINUE
 
 if [ $CONTINUE != "y" ]
@@ -7,32 +7,44 @@ if [ $CONTINUE != "y" ]
         exit
 fi
 
-echo "Enter the MySQL DB username:"
-read DBUSERNAME
+echo "Enter the DB username for Django:"
+read -e -i "graphite" DBUSERNAME
 echo "Enter the DB Password:"
 read DBPASS
-echo "Enter the DB Name:"
-read DBNAME
-echo "Enter a new DB PW for the root user to be setup. Keep in mind that you'll need to enter this same password later again in a few minutes."
+echo "Enter the DB name for Django:"
+read -e -i "graphite" DBNAME
+echo "Enter a new DB PW for the root MySQL user to be setup. Keep in mind that you'll need to enter this same password later in a few minutes."
 read ROOTPW
-echo "Server Public IP address"
+echo "This server's public IP address (Will be added to the Apache config):"
 read IPADDRESS
-echo "Enter a 32 character string of letters and numbers:"
+echo "Enter a 32 character string of letters and numbers to be used as a secret key for Django:"
 read SECRET_KEY
 
-#yum install epel-release wget
-#wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-#sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm
-#rm -f mysql-community-release-el7-5.noarch.rpm
-echo "Installing:"
-echo "The EPEL Repo"
-echo "Graphite Web"
-echo "MySQL Client"
-echo "MySQL Server"
-echo "MySQL Python"
-echo "Python Carbon"
+echo "Installing EPEL Repo and wget"
 sleep 3
-yum install epel-release graphite-web mysql mysql-server MySQL-python python-carbon
+yum install epel-release wget -y
+
+echo "Installing the MySQL Repository"
+sleep 3
+wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm
+rm -f mysql-community-release-el7-5.noarch.rpm
+
+echo "Installing MySQL"
+sleep 3
+yum install mysql-server -y
+
+echo "Installing Graphite Web"
+sleep 3
+yum install graphite-web -y
+
+echo "Installing MySQL Python"
+sleep 3
+yum install MySQL-python -y
+
+echo "Installing Python Carbon"
+sleep 3
+yum install python-carbon -y
 
 echo "Starting the MySQL Deamon now."
 sleep 3
@@ -78,13 +90,6 @@ echo "Syncing the Graphite Web Database"
 sleep 3
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
-echo "Starting Carbon Cache"
-sleep 1
-/etc/init.d/carbon-cache start
-echo "Starting Apache"
-sleep 1
-/etc/init.d/httpd start
-
 echo "Configuring Carbon Cache, MySQL, and Apache so that they start on boot"
 sleep 3
 chkconfig carbon-cache on
@@ -124,10 +129,10 @@ cat << EOT >> /etc/httpd/conf/httpd.conf
 </VirtualHost>
 EOT
 
-echo "Restarting Apache and Carbon-Cache"
+echo "Starting Apache and Carbon-Cache"
 sleep 1
-systemctl restart httpd
-systemctl restart carbon-cache
+systemctl start httpd
+systemctl start carbon-cache
 echo "If all went well you should be able to go to http://$IPADDRESS and see the graphite interface"
 echo "Keep in mind that you'll still need to setup a custom storage schema manually: /etc/carbon/storage-schemas.conf"
 echo "Please RTFM here: http://graphite.readthedocs.io/en/latest/config-carbon.html"
