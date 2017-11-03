@@ -13,8 +13,6 @@ echo "Enter the DB Password:"
 read DBPASS
 echo "Enter the DB name for Django:"
 read -e -i "graphite" DBNAME
-echo "Enter a new DB PW for the root MySQL user to be setup. Keep in mind that you'll need to enter this same password later in a few minutes."
-read ROOTPW
 echo "This server's public IP address (Will be added to the Apache config):"
 read IPADDRESS
 echo "Enter a 32 character string of letters and numbers to be used as a secret key for Django:"
@@ -53,6 +51,9 @@ systemctl start mysqld
 echo "Starting the MySQL Secure Installation Script now."
 sleep 3
 mysql_secure_installation
+
+echo "Enter the password for the root MySQL user."
+read ROOTPW
 
 echo "Configuring Django and Graphite Web automatically for you."
 sleep 3
