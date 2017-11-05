@@ -87,7 +87,7 @@ if [ ! -d /etc/diamond ]
     then
         mkdir /etc/diamond /var/log/diamond /etc/diamond/collectors /etc/diamond/handlers /etc/diamond/user_scripts /etc/diamond/configs || error "Unable to create the Diamond configuration directories. Exit Status: " $?
 
-        #I don't really like adding this archive log, because I don't use it, but the Archive log is setup as an active handler in the default config. If this log file does not exist with the correct ownership, diamond will fail to start. 
+        #I don't really like adding this archive log, because I don't use it, but the Archive log is setup as an active handler in the default config. If this log file does not exist with the correct ownership, diamond will fail to start.
         touch /var/log/diamond/archive.log
         chown diamond:diamond /var/log/diamond/archive.log
         echo_white "/etc/diamond Created"
