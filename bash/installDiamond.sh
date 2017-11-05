@@ -112,9 +112,7 @@ echo_blue "Copying your Diamond configuration into place. A moment please..."
 #Set it up as a service
 echo_blue "Configuring Diamond as a service via an init script. A moment please..."
 
-#The below seems to be done automatically by Diamond. At least on Centos 7. Unfortunatley the init script does not work.
-#curl https://raw.githubusercontent.com/python-diamond/Diamond/master/debian/diamond.init --output diamond.init
-#\cp -f ./diamond.init /etc/init.d/diamond || error "Unable to place the diamond init script into /etc/init.d/diamond. Exit Status:" $?
+curl https://raw.githubusercontent.com/python-diamond/Diamond/master/bin/init.d/diamond --output /etc/init.d/diamond
 #chmod 0755 /etc/init.d/diamond || error "Unable to update diamond init script permissions to 0755. Exit Status:" $?
 #chown root:root /etc/init.d/diamond || error "Unable to update diamond init script ownership to root:root. Exit Status:" $?
 #chkconfig diamond on || error "Unable to set chkconfig diamond on. Exit Status:" $?
