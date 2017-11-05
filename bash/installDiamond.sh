@@ -91,17 +91,22 @@ if [ -f "/usr/lib/python2.6/site-packages/etc/diamond/diamond.conf.example" ]
 		    error "I could not find the default example diamond configuration. This probably means that you are not running python 2.6 or 2.7. Or you've deleted the default example config. You'll need to RTFM and manually configure diamond. Check this script for hints if needed."
 fi
 
-echo_blue "Creating the Diamond configuration and log directories, A moment please..."
+echo_blue "Creating the Diamond configuration dirs and log dirs, and the log file. A moment please..."
 
 if [ ! -d /etc/diamond ]
     then
         mkdir /etc/diamond /var/log/diamond /etc/diamond/collectors /etc/diamond/handlers /etc/diamond/user_scripts /etc/diamond/configs || error "Unable to create the Diamond configuration directories. Exit Status: " $?
+
+        #I don't really like adding this archive log, because I don't use it, but the Archive log is setup as an active handler in the default config. If this log file does not exist with the correct ownership, diamond will fail to start. 
+        touch /var/log/diamond/archive.log
+        chown diamond:diamond /var/log/diamond/archive.log
         echo_white "/etc/diamond Created"
         echo_white "/var/log/diamond Created"
         echo_white "/etc/diamond/collectors Created"
         echo_white "/etc/diamond/handlers Created"
         echo_white "/etc/diamond/user_scripts Created"
         echo_white "/etc/diamond/configs Created"
+        echo_white "/var/log/diamond/archive.log Created"
 
 fi
 
@@ -134,6 +139,6 @@ echo
 echo
 echo
 echo_blue "Diamond has been installed and started."
-echo_blue "The Diamond collector is sending statistics to the handler that you have configured right now. Please allow a few moments and check."
+echo_blue "The Diamond collector is sending statistics to the handler(s) that you have configured as you read this. Please allow a few moments and check."
 echo_blue "To enable more collectors run diamond-setup"
 
