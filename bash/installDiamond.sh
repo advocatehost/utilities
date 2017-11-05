@@ -88,7 +88,7 @@ if [ -f "/usr/lib/python2.6/site-packages/etc/diamond/diamond.conf.example" ]
 	    then
 	        DIAMOND_CONFIG="/usr/lib/python2.7/site-packages/etc/diamond/diamond.conf"
 	    else
-		    error "I could not find the default diamond configuration. This probably means that you are not running python 2.6 or 2.7. You'll need to RTFM and manually configure diamond. Check this script for hints if needed."
+		    error "I could not find the default example diamond configuration. This probably means that you are not running python 2.6 or 2.7. Or you've deleted the default example config. You'll need to RTFM and manually configure diamond. Check this script for hints if needed."
 fi
 
 echo_blue "Creating the Diamond configuration and log directories, A moment please..."
