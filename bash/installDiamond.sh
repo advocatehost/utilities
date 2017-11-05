@@ -81,16 +81,6 @@ echo_blue "Installing the Diamond collector via pip, A moment please..."
 
 pip install diamond || error "Unable to install the Diamond collector via pip. Exit Status: " $?
 
-if [ -f "/usr/lib/python2.6/site-packages/etc/diamond/diamond.conf.example" ]
-    then
-        DIAMOND_CONFIG="/usr/lib/python2.6/site-packages/etc/diamond/diamond.conf"
-	elif [ -f "/usr/lib/python2.7/site-packages/etc/diamond/diamond.conf.example" ]
-	    then
-	        DIAMOND_CONFIG="/usr/lib/python2.7/site-packages/etc/diamond/diamond.conf"
-	    else
-		    error "I could not find the default example diamond configuration. This probably means that you are not running python 2.6 or 2.7. Or you've deleted the default example config. You'll need to RTFM and manually configure diamond. Check this script for hints if needed."
-fi
-
 echo_blue "Creating the Diamond configuration dirs and log dirs, and the log file. A moment please..."
 
 if [ ! -d /etc/diamond ]
@@ -114,10 +104,7 @@ fi
 echo_blue "Copying your Diamond configuration into place. A moment please..."
 
 # the \ before a command overrides any aliases. In this case we are overriding any aliases that would force us to confirm overwriting the config files, thus breaking the automatic nature of this script.
-\cp -f ~/diamond.conf $DIAMOND_CONFIG || error "Unable to copy diamond.conf from ~/diamond.conf to $DIAMOND_CONFIG . You will need to RTFM and supply your own diamond configuration file at ~/diamond.conf to continue . Exit Status:" $?
-
-#To be brutally honest, I'm don't remember why I softlink this config instead of just placing it directly. This mayhaps could use some refactoring after I RTFM some more.
-ln -f -s $DIAMOND_CONFIG /etc/diamond || error "Unable to softlink from $DIAMOND_CONFIG to /etc/diamond/diamond.conf. Exit Status:" $?
+\cp -f /root/diamond.conf /etc/diamond || error "Unable to copy /root/diamond.conf to /etc/diamond/diamond.conf Exit Status:" $?
 
 #I'll update this later so that I can include a better collector config.
 # \cp -f ./collectorConfigs/CPUCollector.conf /etc/diamond/collectors/ || error "Unable to copy CPUCollector.conf, exit status " $?
