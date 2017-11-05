@@ -52,11 +52,11 @@ function install_epel(){
 
 }
 
-if [ -f ~/diamond.conf ]
+if [ -f /root/diamond.conf ]
 then
-    echo_blue "Using the supplied configuration file from ~/diamond.conf"
+    echo_blue "Using the supplied configuration file from /root/diamond.conf"
 else
-    error "Please add your own diamond.conf file at ~/diamond.conf . You can use the examle mentioned in the diamond docs and simply update the handler host address to get started quickly."
+    error "Please add your own diamond.conf file at /root/diamond.conf . There is an great example configuration to work from on the python-diamond github."
 fi
 
 echo_blue "Create the diamond system user."
